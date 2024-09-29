@@ -126,8 +126,10 @@ def get_symmetrized_pmg(pmg, tol=1e-3, a_tol=5.0, style="pyxtal", hn=None):
     Returns:
         pymatgen structure with symmetrized lattice
     """
-
-    pmg, hn_new = symmetrize(pmg, tol, a_tol=a_tol, style=style, hn=hn)
+    try:
+        pmg, hn_new = symmetrize(pmg, tol, a_tol=a_tol, style=style, hn=hn)
+    except AttributeError:
+        return get_symmetrized_pmg(pmg, tol*0.9, a_tol, style, hn)
     s = sga(pmg, symprec=tol, angle_tolerance=a_tol)
     # make sure that the coordinates are in standard setting
     # if hn is None:
