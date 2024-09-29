@@ -127,16 +127,16 @@ def get_symmetrized_pmg(pmg, tol=1e-3, a_tol=5.0, style="pyxtal", hn=None):
         pymatgen structure with symmetrized lattice
     """
 
-    pmg, hn = symmetrize(pmg, tol, a_tol=a_tol, style=style, hn=hn)
+    pmg, hn_new = symmetrize(pmg, tol, a_tol=a_tol, style=style, hn=hn)
     s = sga(pmg, symprec=tol, angle_tolerance=a_tol)
     # make sure that the coordinates are in standard setting
     # if hn is None:
     #    hn = Hall(s._space_group_data['number'], style=style).hall_default
-    if hn != s._space_group_data.hall_number:
+    if hn_new != s._space_group_data.hall_number:
         corrected_symmetry_dataset = get_symmetry_dataset(
-            s._cell, tol, angle_tolerance=a_tol, hall_number=hn)
+            s._cell, tol, angle_tolerance=a_tol, hall_number=hn_new)
         if corrected_symmetry_dataset is None:
-            s = sga(pmg, symprec=tol*0.9, angle_tolerance=a_tol)
+            return get_symmetrized_pmg(pmg, tol*0.9, a_tol, style, hn)
         else:
             s._space_group_data = corrected_symmetry_dataset
     return s.get_symmetrized_structure(), s.get_space_group_number()
