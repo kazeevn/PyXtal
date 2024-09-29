@@ -133,8 +133,10 @@ def get_symmetrized_pmg(pmg, tol=1e-3, a_tol=5.0, style="pyxtal", hn=None):
     # if hn is None:
     #    hn = Hall(s._space_group_data['number'], style=style).hall_default
     if hn != s._space_group_data.hall_number:
-        s._space_group_data = get_symmetry_dataset(
+        corrected_symmetry_dataset = get_symmetry_dataset(
             s._cell, tol, angle_tolerance=a_tol, hall_number=hn)
+        if corrected_symmetry_dataset is not None:
+            s._space_group_data = corrected_symmetry_dataset
     return s.get_symmetrized_structure(), s.get_space_group_number()
 
 
