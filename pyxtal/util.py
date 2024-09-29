@@ -137,6 +137,8 @@ def get_symmetrized_pmg(pmg, tol=1e-3, a_tol=5.0, style="pyxtal", hn=None):
             s._cell, tol, angle_tolerance=a_tol, hall_number=hn)
         if corrected_symmetry_dataset is None:
             s = sga(pmg, symprec=tol*0.9, angle_tolerance=a_tol)
+        else:
+            s._space_group_data = corrected_symmetry_dataset
     return s.get_symmetrized_structure(), s.get_space_group_number()
 
 
